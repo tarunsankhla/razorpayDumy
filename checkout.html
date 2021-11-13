@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="rzp-button1">Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var options = {
+    "key": "rzp_test_Fe8Y80mOvT2vUJ", // Enter the Key ID generated from the Dashboard
+    "amount": "5000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "Acme Corp",
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": "order_IL2Oz0WQmBEsRo", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+        alert("done"+response.razorpay_payment_id);
+        alert("done"+response.razorpay_order_id);
+        alert("done"+response.razorpay_signature)
+    },
+    "prefill": {
+        "name": "Tarun Sankhla",
+        "email": "tarun@example.com",
+        "contact": "773856133"
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+rzp1.on('payment.failed', function (response){
+        alert("failed",response.error.code);
+        alert("failed",response.error.description);
+        alert("failed",response.error.source);
+        alert("failed",response.error.step);
+        alert("failed",response.error.reason);
+        alert("failed",response.error.metadata.order_id);
+        alert("failed",response.error.metadata.payment_id);
+});
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+</body>
+</html>
